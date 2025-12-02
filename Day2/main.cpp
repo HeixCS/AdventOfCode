@@ -28,20 +28,24 @@ long long get_number_digits(long long input){
     }
     return num_digits;
 }
-bool check_duplicates(string digit_str, int num_digits){
+bool check_dup_str(string const& digit_str, int num_digits, int divisor){
+    for(int j = 0; j < divisor - 1; j++){
+        for(long long k = 0; k < num_digits / divisor; k++){
+            if(digit_str[(num_digits / divisor) * j + k] != digit_str[(num_digits / divisor) * (1 + j) + k]){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool check_duplicates(string const& digit_str, int num_digits){
     for(int i = 2; i <= num_digits; i++){
         int flag = true;
         // Checks if number is cleanly divisible
-        if(num_digits % i != 0) flag = false;
+        if(num_digits % i != 0) continue;
 
-        for(int j = 0; j < i - 1; j++){
-            for(long long k = 0; k < num_digits / i; k++){
-                if(digit_str[(num_digits / i) * j + k] != digit_str[(num_digits / i) * (1 + j) + k]){
-                    flag = false;
-                }
-            }
-        }
-        if(flag){
+        if(check_dup_str(digit_str, num_digits, i)){
             return true;
         }
     }
