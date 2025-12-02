@@ -28,6 +28,25 @@ long long get_number_digits(long long input){
     }
     return num_digits;
 }
+bool check_duplicates(string digit_str, int num_digits){
+    for(int i = 2; i <= num_digits; i++){
+        int flag = true;
+        // Checks if number is cleanly divisible
+        if(num_digits % i != 0) flag = false;
+
+        for(int j = 0; j < i - 1; j++){
+            for(long long k = 0; k < num_digits / i; k++){
+                if(digit_str[(num_digits / i) * j + k] != digit_str[(num_digits / i) * (1 + j) + k]){
+                    flag = false;
+                }
+            }
+        }
+        if(flag){
+            return true;
+        }
+    }
+    return false;
+}
 
 int main(void){
     string total_str;
@@ -53,15 +72,11 @@ int main(void){
             bool flag = true;
             string digit_str = to_string(i);
             long long num_digits = digit_str.size();
-            if(num_digits % 2 != 0) flag = false;
-            for(long long j = 0; j < num_digits / 2; j++){
-                if(digit_str[j] != digit_str[num_digits / 2 + j]){
-                    flag = false;
-                }
-            }
-            if(flag){
+            // Checking if it has duplicates
+            if(check_duplicates(digit_str, num_digits)){
                 sum += i;
             }
+
         }
     }
     cout << "final sum is " << sum;
