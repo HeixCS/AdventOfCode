@@ -5,20 +5,29 @@
 #include <sstream>
 using namespace std;
 
-vector<string> read_file(string file_name){
-    ifstream input_file(file_name);
-    vector<string> output_arr;
-    if(!input_file.is_open()){
-        cout << "File not found ):";
-    }
-    string read_line;
-    while(getline(input_file, read_line)){
-        output_arr.push_back(read_line);
-    }
+// class file_delimiter{
+//     public:
+//         string file_name;
+//         ifstream file_stream;
+    
+//     file_delimiter(string file_input){
+//         file_name = file_input;
+//         // Opening file stream
+//         this->file_stream = ifstream(file_input);
+//         vector<string> output_arr;
+//         if(!this->file_stream.is_open()){
+//             cout << "File not found ):";
+//         }
+//     }
 
-    input_file.close();
-    return output_arr;
-}
+//     ~file_delimiter(){
+//         file_stream.close();
+//     }
+//     ifstream get(string & range){
+//         char delim = ',';
+//         return getline(file_stream, range, delim);
+//     }
+// };
 long long get_number_digits(long long input){
     long long num_digits = 0;
     long long input_processed = input;
@@ -57,17 +66,17 @@ int main(void){
     long long lower_digits, higher_digits;
     long long lower_range_dig, higher_range_dig;
     string range, lower_range, higher_range;
-    // Reading file and making total string
-    vector<string> str_arr = read_file("input.txt");
-    for(auto string : str_arr){
-        total_str.append(string);
-    }
-    // Delimiting the string
-    stringstream string_ranges(total_str);
-    char del = ',', del2 = '-';
 
+    char del = ',', del2 = '-';
     long long sum = 0;
-    while(getline(string_ranges, range, del)){
+
+    ifstream file_stream("input.txt");
+    vector<string> output_arr;
+    if(!file_stream.is_open()){
+        cout << "File not found ):";
+    }
+
+    while(getline(file_stream, range, del)){
         // Dividing into two ranges
         stringstream range_divided(range);
         getline(range_divided, lower_range, del2);
