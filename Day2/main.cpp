@@ -50,6 +50,10 @@ bool check_duplicates(string digit_str, int num_digits){
 
 int main(void){
     string total_str;
+    long long lower_digits, higher_digits;
+    long long lower_range_dig, higher_range_dig;
+    string range, lower_range, higher_range;
+    // Reading file and making total string
     vector<string> str_arr = read_file("input.txt");
     for(auto string : str_arr){
         total_str.append(string);
@@ -57,19 +61,17 @@ int main(void){
     // Delimiting the string
     stringstream string_ranges(total_str);
     char del = ',', del2 = '-';
-    long long lower_digits, higher_digits;
-    long long lower_range_dig, higher_range_dig;
-    string range, lower_range, higher_range;
+
     long long sum = 0;
     while(getline(string_ranges, range, del)){
-        // Dividing digit long longo two
+        // Dividing into two ranges
         stringstream range_divided(range);
         getline(range_divided, lower_range, del2);
         getline(range_divided, higher_range, del2);
         lower_range_dig = stoll(lower_range);
         higher_range_dig = stoll(higher_range);
+        // Checking if number has duplicates
         for(long long i = lower_range_dig; i <= higher_range_dig; i++){
-            bool flag = true;
             string digit_str = to_string(i);
             long long num_digits = digit_str.size();
             // Checking if it has duplicates
