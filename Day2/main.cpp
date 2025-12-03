@@ -5,29 +5,6 @@
 #include <sstream>
 using namespace std;
 
-// class file_delimiter{
-//     public:
-//         string file_name;
-//         ifstream file_stream;
-    
-//     file_delimiter(string file_input){
-//         file_name = file_input;
-//         // Opening file stream
-//         this->file_stream = ifstream(file_input);
-//         vector<string> output_arr;
-//         if(!this->file_stream.is_open()){
-//             cout << "File not found ):";
-//         }
-//     }
-
-//     ~file_delimiter(){
-//         file_stream.close();
-//     }
-//     ifstream get(string & range){
-//         char delim = ',';
-//         return getline(file_stream, range, delim);
-//     }
-// };
 long long get_number_digits(long long input){
     long long num_digits = 0;
     long long input_processed = input;
