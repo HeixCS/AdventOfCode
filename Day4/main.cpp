@@ -73,15 +73,26 @@ int main(void){
     std::vector<std::string> map;
     int line_size;
     long long sum = 0;
+    bool change = false;
+    std::vector<std::pair<int,int>> coords_remove;
     while(line_holder = freader.get()){
         map.emplace_back(line_holder.value());
     }
-    for(int y = 0; y < map.size(); y++){
-        for(int x = 0; x < map[0].size(); x++){
-            if(check_pickable(x,y,map)){
-                sum++;
+    do{
+        change = false;
+        for(int y = 0; y < map.size(); y++){
+            for(int x = 0; x < map[0].size(); x++){
+                if(check_pickable(x,y,map)){
+                    coords_remove.push_back(std::make_pair(y, x));
+                    sum++;
+                    change = true;
+                }
             }
         }
-    }
+        for(auto coord : coords_remove){
+            map[coord.first][coord.second] = '.';
+        }
+        coords_remove.clear();
+    }while(change);
     std::cout << "The number of valid rolls are " << sum;
 }
