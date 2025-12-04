@@ -39,21 +39,10 @@ int main(void){
         line = line_holder.value();
         line_size = line.size();
         // Finding the first largest digit
-        for(int i = 0; i < line_size; i++){
+        for(int i = 0; i < line_size - 1; i++){
             if((line[i] - '0') > max_digit_tens){
                 max_digit_tens = line[i] - '0';
                 max_digit_index_tens = i;
-            }
-        }
-        // If the largest digit is at the end of the string
-        if(max_digit_index_tens == line.size() - 1 && line_size != 1){
-            max_digit_tens = 0;
-            max_digit_index_tens = -1;
-            for(int i = 0; i < line.size() - 1; i++){
-                if((line[i] - '0') > max_digit_tens){
-                    max_digit_tens = line[i] - '0';
-                    max_digit_index_tens = i;
-                }
             }
         }
         // Finding ones place index
