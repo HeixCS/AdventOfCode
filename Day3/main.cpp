@@ -4,7 +4,7 @@
 #include <string>
 #include <sstream>
 #include <experimental/optional>
-
+#include <cmath>
 class file_reader{
     private:
         std::ifstream file_stream;
@@ -29,30 +29,41 @@ class file_reader{
     }
 };
 
+long long power(long long base, long long exp){
+    long long output = 1;
+    for(int i = 0 ; i < exp; i++){
+        output *= base;
+    }
+    return output;
+}
+
 int main(void){
     file_reader freader("input.txt");
     std::experimental::optional<std::string> line_holder;
     std::string line;
-    int line_size, sum = 0;
+    int line_size;
+    long long sum = 0;
     while(line_holder = freader.get()){
-        int max_digit_tens = 0, max_digit_ones = 0, max_digit_index_tens = -1, max_digit_index_ones = -1;
+        int digits[13], digits_index[13];
+        for(int i = 0; i < 13; i++){
+            digits[i] = -1;
+            digits_index[i] = -1;
+        }
+
         line = line_holder.value();
         line_size = line.size();
-        // Finding the first largest digit
-        for(int i = 0; i < line_size - 1; i++){
-            if((line[i] - '0') > max_digit_tens){
-                max_digit_tens = line[i] - '0';
-                max_digit_index_tens = i;
+        for(int i = 1; i < 13; i++){
+            // Finding the first largest digit
+            for(int j = digits_index[i-1] + 1; j < line_size - 12 + i; j++){
+                if((line[j] - '0') > digits[i]){
+                    digits[i] = line[j] - '0';
+                    digits_index[i] = j;
+                }
             }
         }
-        // Finding ones place index
-        for(int i = max_digit_index_tens + 1; i < line_size; i++){
-            if(line[i] - '0'> max_digit_ones){
-                max_digit_ones = line[i] - '0';
-                max_digit_index_ones = i;
-            }
+        for(int i = 1; i < 13; i ++){
+            sum += (long long)power(10LL, 12-i) * digits[i]; 
         }
-        sum += max_digit_tens * 10 + max_digit_ones;
     }
     std::cout << "The final sum is " << sum << "\n";
 }
