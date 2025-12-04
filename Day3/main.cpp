@@ -43,26 +43,27 @@ int main(void){
     std::string line;
     int line_size;
     long long sum = 0;
+    const int number_of_digits = 12;
     while(line_holder = freader.get()){
-        int digits[13], digits_index[13];
-        for(int i = 0; i < 13; i++){
+        int digits[number_of_digits+1], digits_index[number_of_digits+1];
+        for(int i = 0; i <= number_of_digits; i++){
             digits[i] = -1;
             digits_index[i] = -1;
         }
 
         line = line_holder.value();
         line_size = line.size();
-        for(int i = 1; i < 13; i++){
+        for(int i = 1; i <= number_of_digits; i++){
             // Finding the first largest digit
-            for(int j = digits_index[i-1] + 1; j < line_size - 12 + i; j++){
+            for(int j = digits_index[i-1] + 1; j < line_size - number_of_digits + i; j++){
                 if((line[j] - '0') > digits[i]){
                     digits[i] = line[j] - '0';
                     digits_index[i] = j;
                 }
             }
         }
-        for(int i = 1; i < 13; i ++){
-            sum += (long long)power(10LL, 12-i) * digits[i]; 
+        for(int i = 1; i < number_of_digits + 1; i ++){
+            sum += (long long)power(10LL, number_of_digits-i) * digits[i]; 
         }
     }
     std::cout << "The final sum is " << sum << "\n";
