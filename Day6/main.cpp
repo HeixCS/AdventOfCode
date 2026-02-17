@@ -32,60 +32,80 @@ class file_reader{
     }
 };
 
-void clean_string(std::string & input){
-    bool changed = true;
-    while(changed){
-        changed = false;
-        for(int i = 0; i < input.size(); i++){
-            while(input[i] == ' ' && input[i] == input[i + 1]){
-                input.erase(input.begin() + i + 1);
-            }
-            if(changed) break;
+struct Problem{
+    std::vector<long long> numbers;
+    std::string operation;
+    long long result = 0;
+};
+
+std::string trim_spaces(std::string input){
+    std::string output;
+    for(auto character : input){
+        if(!std::isspace(character)){
+            output.push_back(character);
         }
     }
-    if(input[0] == ' '){
-        input.erase(input.begin());
-    }
+    return output;
 }
 
 int main(void){
-    file_reader freader("input.txt");
+    file_reader freader("./Day6/input.txt");
     std::optional<std::string> line_holder;
-    std::string line, val;
-    std::vector<std::vector<long long>> list_ll;
-    std::vector<std::string> list_ops;
+    std::string line, val, row_ops;
+    std::vector<std::string> list_ops, file_read;
+    std::vector<char> read_numbers;
     const char del = ' ';
     long long sum = 0;
 
-
+    // Reading the whole file into a vector
     while((line_holder = freader.get())){
-        std::vector<long long> row_ll;
-        std::vector<std::string> row_ops;
-        bool operator_bool = false;
         line = line_holder.value();
-        clean_string(line);
-        std::stringstream range_divided(line);
-        while(std::getline(range_divided, val, del)){
-            if(!std::isdigit(val[0])) operator_bool = true;
-            if(!operator_bool) row_ll.push_back(std::stoll(val));
-            else row_ops.push_back(val);
-        }
-        // std::cout << "operator size is " << row_ops.size() << "\n";
-        // std::cout << "line size is " << row_ll.size() << "\n";
-        if(!operator_bool) list_ll.emplace_back(std::move(row_ll));
-        else list_ops = std::move(row_ops);
+        file_read.emplace_back(line);
     }
-    for(int i = 0; i < list_ops.size(); i++){
-        std::string op = list_ops[i];
-        long long result = list_ll[0][i];
-        for(int j = 1; j < list_ll.size(); j++){
-            // std::cout << list_ll[j][i] << " ";
-            switch(op[0]){
+
+    // Getting the operations row and dividing it
+    row_ops = std::move(file_read[file_read.size() - 1]);
+    file_read.pop_back();    
+    std::stringstream ops_divided(line);
+    while(std::getline(ops_divided, val, del)){   
+        if (val.size() > 0) list_ops.push_back(val);
+    }
+
+    std::vector<Problem> set_of_problems(list_ops.size());
+
+    // Setting the operations
+    for (int i = 0; i < set_of_problems.size(); i++){
+        set_of_problems[i].operation = list_ops[i];
+    }
+
+    // Reading all the digits from top to bottom
+    int current_problem = 0;
+    for(int i = 0; i < file_read[0].size(); i++){
+        read_numbers.clear();
+        for(int j = 0; j < file_read.size(); j++){
+            read_numbers.push_back(file_read[j][i]);
+        }
+        std::string conc_read_number {read_numbers.begin(), read_numbers.end()};
+        conc_read_number = trim_spaces(conc_read_number);
+        if(conc_read_number.size() > 0){
+            set_of_problems[current_problem].numbers.push_back(std::stoll(conc_read_number));
+        }
+        else{ 
+            current_problem++;
+        }
+    }
+
+    // Solving each problem
+    for (auto equation : set_of_problems){
+        char operation = equation.operation[0];
+        long long result = equation.numbers[0];
+        for(int i = 1; i < equation.numbers.size() ; i++){
+             switch(operation){
                 case '*':
-                    result *= list_ll[j][i];
+                    result *= equation.numbers[i];
                     break;
                 case '+':
-                    result += list_ll[j][i];
+                    result += equation.numbers[i];
                     break;
                 default:
                     std::cout << "BROKEN";
@@ -93,8 +113,7 @@ int main(void){
                     break;
             }
         }
-        // std::cout << "result is " << result << "\n";
         sum += result;
     }
-    std::cout << "Final result is   "<< sum;
+    std::cout << "Final result is "<< sum << "\n";
 }
