@@ -57,7 +57,8 @@ int main(void){
     const char del = ' ';
     long long sum = 0;
 
-    while(line_holder = freader.get()){
+
+    while((line_holder = freader.get())){
         std::vector<long long> row_ll;
         std::vector<std::string> row_ops;
         bool operator_bool = false;

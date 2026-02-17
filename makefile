@@ -18,22 +18,22 @@ Day5: ./Day5/main.cpp
 	g++ ./Day5/main.cpp -o ExecDay5
 
 Day6: ./Day6/main.cpp
-	g++ ./Day6/main.cpp -o ExecDay6
+	g++ -std=c++17 -Wall ./Day6/main.cpp -o ExecDay6
 
 Day7: ./Day7/main.cpp
-	g++ ./Day7/main.cpp -o ExecDay7
+	g++ -std=c++17 ./Day7/main.cpp -o ExecDay7
 
 Day8: ./Day8/main.cpp
-	g++ ./Day7/main.cpp -o ExecDay8
+	g++ -std=c++17 ./Day7/main.cpp -o ExecDay8
 
 Day9: ./Day9/main.cpp
-	g++ ./Day9/main.cpp -o ExecDay9
+	g++ -std=c++17 ./Day9/main.cpp -o ExecDay9
 
 Day10: ./Day10/main.cpp
-	g++ ./Day10/main.cpp -o ExecDay10
+	g++ -std=c++17 ./Day10/main.cpp -o ExecDay10
 
 Day11: ./Day11/main.cpp
-	g++ ./Day11/main.cpp -o ExecDay11
+	g++ -std=c++17 ./Day11/main.cpp -o ExecDay11
 
 Day12: ./Day12/main.cpp
-	g++ ./Day12/main.cpp -o ExecDay12
+	g++ -std=c++17 ./Day12/main.cpp -o ExecDay12
