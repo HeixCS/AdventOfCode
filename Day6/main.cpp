@@ -3,7 +3,8 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-#include <experimental/optional>
+// #include <experimental/optional>
+#include <optional>
 #include <cmath>
 #include <sstream>
 #include <complex>
@@ -21,10 +22,10 @@ class file_reader{
             }
         }
 
-    std::experimental::optional<std::string> get(){
+    std::optional<std::string> get(){
         std::string output;
         if(eof()){
-            return std::experimental::nullopt;
+            return std::nullopt;
         }
         getline(file_stream, output);
         return output;
@@ -49,7 +50,7 @@ void clean_string(std::string & input){
 
 int main(void){
     file_reader freader("input.txt");
-    std::experimental::optional<std::string> line_holder;
+    std::optional<std::string> line_holder;
     std::string line, val;
     std::vector<std::vector<long long>> list_ll;
     std::vector<std::string> list_ops;
@@ -94,5 +95,5 @@ int main(void){
         // std::cout << "result is " << result << "\n";
         sum += result;
     }
-    std::cout << "Final result is "<< sum;
+    std::cout << "Final result is   "<< sum;
 }
