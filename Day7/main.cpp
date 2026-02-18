@@ -39,19 +39,19 @@ inline bool check_bound(std::vector<std::string> &map, int x, int y){
     return true;
 }
 
-void explore(std::vector<std::string> &map, int x, int y, int &split_count){
-    //Checking bounds
-    if(x >= map[0].size() || x < 0) return;
-    if(y + 2 >= map.size()) return;
-    // if(!check_bound) return;
-
-    if(map[y+1][x] == '.'){
-        explore(map, x, y+1, split_count);
-    }
-    if(map[y+1][x] == '^'){
-        split_count++;
-        explore(map, x+1, y+2, split_count); 
-        explore(map, x-1, y+2, split_count); 
+void explore(std::vector<std::string> &map, std::vector<std::vector<int>> &value_map, int x, int y, int increment){
+    
+    while(y > 0){
+        y--;
+        // std::cout << "exploring " << x << " and " << y << "\n";
+        if(map[y][x] == '^') break;
+        // std::cout << "reached\n";
+        if(check_bound(map, x-1, y)){
+            if(map[y][x-1] == '^') value_map[y][x-1] += increment;
+        }
+        if(check_bound(map, x+1, y)){
+            if(map[y][x+1] == '^') value_map[y][x+1] += increment;
+        }
     }
     return;
 }
@@ -74,7 +74,26 @@ int main(void){
 
     auto starting_itr = std::find(file_read[0].begin(), file_read[0].end(), 'S');
     int starting_index = std::distance(file_read[0].begin(), starting_itr);
+    std::vector<std::vector<int>> stored_vals(file_read.size(), std::vector<int>(file_read[0].size(), 0));
 
-    explore(file_read, starting_index, 1, result);
-    std::cout << " The result is " << result << "\n";
+    for(int i = 0; i < file_read[0].size(); i++){
+        if(file_read[file_read.size() - 2][i] == '.') explore(file_read, stored_vals, i, file_read.size() - 2, 1);
+        if(file_read[file_read.size() - 2][i] == '^') stored_vals[file_read.size() - 2][i] = 2;
+    }
+
+    for(int i = file_read.size() - 2; i >= 0 ; i--){
+        for(int j = 0; j < file_read[0].size(); j++){
+            if(file_read[i][j] == '^'){
+                explore(file_read, stored_vals, j, i, stored_vals[i][j]);
+            }
+        }
+    }
+    // for(int i = 0 ; i < stored_vals.size(); i++){
+    //     for(int j = 0; j < stored_vals[0].size(); j++){
+    //         std::cout << stored_vals[i][j] << "-";
+    //     }
+    //     std::cout << "\n";
+    // }
+
+    std::cout << " The result is " << stored_vals[2][starting_index] << "\n";
 }
