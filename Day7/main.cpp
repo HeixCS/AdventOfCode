@@ -8,6 +8,7 @@
 #include <cmath>
 #include <sstream>
 #include <complex>
+#include <algorithm>
 class file_reader{
     private:
         std::ifstream file_stream;
@@ -32,20 +33,25 @@ class file_reader{
     }
 };
 
+inline bool check_bound(std::vector<std::string> &map, int x, int y){
+    if(x >= map[0].size() || x < 0) return false;
+    if(y + 1 >= map.size()) return false;
+    return true;
+}
+
 void explore(std::vector<std::string> &map, int x, int y, int &split_count){
     //Checking bounds
     if(x >= map[0].size() || x < 0) return;
-    if(y + 1 >= map.size()) return;
-    map[y][x] = '|';
+    if(y + 2 >= map.size()) return;
+    // if(!check_bound) return;
 
     if(map[y+1][x] == '.'){
         explore(map, x, y+1, split_count);
-        map[y+1][x] = '|';
     }
     if(map[y+1][x] == '^'){
         split_count++;
-        explore(map, x+1, y+1, split_count); 
-        explore(map, x-1, y+1, split_count); 
+        explore(map, x+1, y+2, split_count); 
+        explore(map, x-1, y+2, split_count); 
     }
     return;
 }
@@ -55,21 +61,20 @@ int main(void){
     std::optional<std::string> line_holder;
     std::string line;
     std::vector<std::string> file_read;
-    int result = 0;
+    int result = 1;
 
     // Reading the whole file into a vector
     while((line_holder = freader.get())){
         line = line_holder.value();
         file_read.emplace_back(line);
     }
-    // for (auto line : file_read){
-    //     std::cout << line << "\n";
-    // }
+    for (auto line : file_read){
+        std::cout << line << "\n";
+    }
 
     auto starting_itr = std::find(file_read[0].begin(), file_read[0].end(), 'S');
     int starting_index = std::distance(file_read[0].begin(), starting_itr);
 
-    // std::cout << starting_index << "\n";
-    explore(file_read, starting_index, 0, result);
+    explore(file_read, starting_index, 1, result);
     std::cout << " The result is " << result << "\n";
 }
