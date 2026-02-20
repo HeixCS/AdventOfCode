@@ -33,13 +33,13 @@ class file_reader{
     }
 };
 
-inline bool check_bound(std::vector<std::string> &map, int x, int y){
+inline bool check_bound(std::vector<std::string> &map, long long x, long long y){
     if(x >= map[0].size() || x < 0) return false;
     if(y + 1 >= map.size()) return false;
     return true;
 }
 
-void explore(std::vector<std::string> &map, std::vector<std::vector<int>> &value_map, int x, int y, int increment){
+void explore(std::vector<std::string> &map, std::vector<std::vector<long long>> &value_map, long long x, long long y, long long increment){
     
     while(y > 0){
         y--;
@@ -56,14 +56,15 @@ void explore(std::vector<std::string> &map, std::vector<std::vector<int>> &value
     return;
 }
 
+
 int main(void){
     file_reader freader("./Day7/input.txt");
     std::optional<std::string> line_holder;
     std::string line;
     std::vector<std::string> file_read;
-    int result = 1;
+    long long result = 1;
 
-    // Reading the whole file into a vector
+    // Reading the whole file long longo a vector
     while((line_holder = freader.get())){
         line = line_holder.value();
         file_read.emplace_back(line);
@@ -73,23 +74,23 @@ int main(void){
     }
 
     auto starting_itr = std::find(file_read[0].begin(), file_read[0].end(), 'S');
-    int starting_index = std::distance(file_read[0].begin(), starting_itr);
-    std::vector<std::vector<int>> stored_vals(file_read.size(), std::vector<int>(file_read[0].size(), 0));
+    long long starting_index = std::distance(file_read[0].begin(), starting_itr);
+    std::vector<std::vector<long long>> stored_vals(file_read.size(), std::vector<long long>(file_read[0].size(), 0));
 
-    for(int i = 0; i < file_read[0].size(); i++){
+    for(long long i = 0; i < file_read[0].size(); i++){
         if(file_read[file_read.size() - 2][i] == '.') explore(file_read, stored_vals, i, file_read.size() - 2, 1);
         if(file_read[file_read.size() - 2][i] == '^') stored_vals[file_read.size() - 2][i] = 2;
     }
 
-    for(int i = file_read.size() - 2; i >= 0 ; i--){
-        for(int j = 0; j < file_read[0].size(); j++){
+    for(long long i = file_read.size() - 2; i >= 0 ; i--){
+        for(long long j = 0; j < file_read[0].size(); j++){
             if(file_read[i][j] == '^'){
                 explore(file_read, stored_vals, j, i, stored_vals[i][j]);
             }
         }
     }
-    // for(int i = 0 ; i < stored_vals.size(); i++){
-    //     for(int j = 0; j < stored_vals[0].size(); j++){
+    // for(long long i = 0 ; i < stored_vals.size(); i++){
+    //     for(long long j = 0; j < stored_vals[0].size(); j++){
     //         std::cout << stored_vals[i][j] << "-";
     //     }
     //     std::cout << "\n";
