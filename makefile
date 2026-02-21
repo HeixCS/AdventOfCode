@@ -24,7 +24,7 @@ Day7: ./Day7/main.cpp
 	g++ -std=c++17 ./Day7/main.cpp -o ExecDay7
 
 Day8: ./Day8/main.cpp
-	g++ -std=c++17 ./Day7/main.cpp -o ExecDay8
+	g++ -std=c++17 ./Day8/main.cpp -o ExecDay8
 
 Day9: ./Day9/main.cpp
 	g++ -std=c++17 ./Day9/main.cpp -o ExecDay9
