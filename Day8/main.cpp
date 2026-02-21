@@ -35,6 +35,14 @@ class file_reader{
         return output;
     }
 };
+inline bool check_equal(std::vector<long long> &id_to_circuit){
+    long long element1=id_to_circuit[0];
+    for(int i = 1; i < id_to_circuit.size(); i++){
+        if(id_to_circuit[i] != element1) return false;
+    }
+    return true;
+}
+
 struct coordinate{
     long long x, y, z;
 };
@@ -99,10 +107,52 @@ int main(void){
     // Making a vector of longs storing all the circuits for the id
     std::vector<long long> id_to_circuit(list_of_coordinates.size(), -1);
 
-    // Connecting the shortest distances
-    for(int i = 0; i < number_of_matches; i++){
-        long long ind1 = distances_v[i].first.first;
-        long long ind2 = distances_v[i].first.second;
+
+    // --------------------- Part 1 ---------------------
+    // // Connecting the shortest distances
+    // for(int i = 0; i < number_of_matches; i++){
+    //     long long ind1 = distances_v[i].first.first;
+    //     long long ind2 = distances_v[i].first.second;
+    //     if(id_to_circuit[ind1] == -1 && id_to_circuit[ind2] == -1){
+    //         id_to_circuit[ind1]=number_of_circuits;
+    //         id_to_circuit[ind2]=number_of_circuits;
+    //         number_of_circuits++;
+    //     }
+    //     else if(id_to_circuit[ind1] == -1){
+    //         id_to_circuit[ind1]=id_to_circuit[ind2];
+    //     }
+    //     else if(id_to_circuit[ind2] == -1){
+    //         id_to_circuit[ind2]=id_to_circuit[ind1];
+    //     }
+    //     else if(id_to_circuit[ind1] == id_to_circuit[ind2]){
+    //         continue;
+    //     }
+    //     else{
+    //         long long new_id = id_to_circuit[ind1];
+    //         long long old_id = id_to_circuit[ind2];
+    //         std::replace(id_to_circuit.begin(), id_to_circuit.end(), old_id, new_id);
+    //     }
+    // }
+
+    // // Getting count of all circuit ids
+    // std::vector<long long> count_circuits(number_of_circuits, 0);
+    // for(auto id : id_to_circuit){
+    //     count_circuits[id]++;
+    // }
+    // std::sort(count_circuits.begin(), count_circuits.end());
+    // // Calculating the final result
+    // long long result = 1;
+    // result *= count_circuits[count_circuits.size()-1];
+    // result *= count_circuits[count_circuits.size()-2];
+    // result *= count_circuits[count_circuits.size()-3];
+    // std::cout << "Result is " << result << "\n";
+    // -------------------------------------
+
+    // Connecting shorter distances till all ids are the same
+    long long ind1, ind2, current_ind=0;
+    do{
+        ind1 = distances_v[current_ind].first.first;
+        ind2 = distances_v[current_ind++].first.second;
         if(id_to_circuit[ind1] == -1 && id_to_circuit[ind2] == -1){
             id_to_circuit[ind1]=number_of_circuits;
             id_to_circuit[ind2]=number_of_circuits;
@@ -122,18 +172,8 @@ int main(void){
             long long old_id = id_to_circuit[ind2];
             std::replace(id_to_circuit.begin(), id_to_circuit.end(), old_id, new_id);
         }
-    }
-
-    // Getting count of all circuit ids
-    std::vector<long long> count_circuits(number_of_circuits, 0);
-    for(auto id : id_to_circuit){
-        count_circuits[id]++;
-    }
-    std::sort(count_circuits.begin(), count_circuits.end());
-    // Calculating the final result
-    long long result = 1;
-    result *= count_circuits[count_circuits.size()-1];
-    result *= count_circuits[count_circuits.size()-2];
-    result *= count_circuits[count_circuits.size()-3];
-    std::cout << "Result is " << result << "\n";
+    } while(!check_equal(id_to_circuit));
+    std::cout << " The coords are " << list_of_coordinates[ind2].x  << " and " << list_of_coordinates[ind1].x << "\n";
+    long long result = list_of_coordinates[ind1].x * list_of_coordinates[ind2].x;
+    std::cout << "The result is " << result << "\n";
 }
