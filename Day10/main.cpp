@@ -3,14 +3,11 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-// #include <experimental/optional>
 #include <optional>
 #include <cmath>
 #include <sstream>
-// #include <complex>
 #include <algorithm>
 #include <utility>
-#include <bitset>
 using u64 = unsigned long long;
 class file_reader{
     private:
@@ -76,12 +73,10 @@ int main(void){
         std::getline(range_divided, value_seperated, del3);
         value_seperated.erase(0,1);
         std::stringstream buttons_stream(value_seperated);
-        // std::cout << value_seperated << "\n";
         // Dividing by space
         while(std::getline(buttons_stream, raw_numbers, del4)){
             raw_numbers.erase(0,1);
             raw_numbers.erase(raw_numbers.size() - 1,1);
-            // std::cout << raw_numbers << "\n";
             std::stringstream button_stream(raw_numbers);
             // Button binary value
             button_result = 0b0;
@@ -98,20 +93,6 @@ int main(void){
             steps++;
         }
         result += steps;
-
-        // Getting the joltage requirements
-        // joltage_req=0b0;
-        // std::getline(range_divided, value_seperated, del3);
-        // value_seperated.erase(value_seperated.size()-1,1);
-        // std::cout << value_seperated << "\n";
-        // std::stringstream joltages_stream(value_seperated);
-        // while(std::getline(joltages_stream, raw_numbers, del)){
-        //     joltage_value = std::stoull(raw_numbers);
-        //     joltage_req |= (1 << joltage_value);
-        // }
-        // std::cout << "The joltage requirement is " << joltage_req << "\n";
-        // std::cout << "\n";
-
     }
     std::cout << "The result is " << result << "\n";
 }
