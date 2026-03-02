@@ -50,6 +50,31 @@ void explore(std::vector<std::vector<bool>>& connection_matrix, std::vector<long
     return;
 }
 
+long long explore_plusa(std::vector<std::vector<bool>>& connection_matrix, 
+                    long long node, 
+                    const long long &final_ind,
+                    const std::vector<long long> &required_ids,
+                    bool fft,
+                    bool dac,
+                    std::map<std::pair<std::pair<bool, bool>, long long>, long long> &cache){
+    long long result = 0;
+    if(node == final_ind){ 
+        if(fft && dac) return 1;
+        else return 0;
+    }
+    if(node == required_ids[0]) fft = true;
+    if(node == required_ids[1]) dac = true;
+
+    if(cache.count({{fft,dac},node})) return cache.at({{fft,dac},node});
+    for(int i=0; i<connection_matrix.size(); i++){
+        if(connection_matrix[node][i]){
+            result += explore_plusa(connection_matrix, i, final_ind, required_ids, fft, dac, cache);
+        }
+    }
+    cache[{{fft,dac},node}] = result;
+    return result;
+}
+
 
 int main(void){
     file_reader freader("./Day11/input.txt");
@@ -60,6 +85,7 @@ int main(void){
     std::vector<std::string> devices;
     std::vector<std::vector<std::string>> device_edges;
     std::unordered_map<std::string, long long> device_to_index;
+    std::map<std::pair<std::pair<bool, bool>, long long>, long long> cache;
     long long current_ind=0, result=0;
     const char del = ':';
     const char del2 = ' ';
@@ -96,6 +122,7 @@ int main(void){
             connection_matrix[i][device_to_index.at(edge)] = true;
         }
     }
+
     // Printing the connection matrix
     // for(auto& val : connection_matrix){
     //     for(auto val2 : val){
@@ -103,9 +130,17 @@ int main(void){
     //     }
     //     std::cout << "\n";
     // }
-    std::vector<long long>explored;
+
+    // std::vector<long long>explored;
     // Exploring the graph Part 1
-    explore(connection_matrix, explored, device_to_index["you"], result, device_to_index["out"]);
+    // explore(connection_matrix, explored, device_to_index["you"], result, device_to_index["out"]);
+
+    // Exploring the graph part 2
+    std::vector<long long> required_ids = {device_to_index["fft"], device_to_index["dac"]};
+    for(auto id :required_ids){
+        std::cout << "The id is " << id << "\n";
+    }
+    result = explore_plusa(connection_matrix, device_to_index["svr"], device_to_index["out"], required_ids, false, false, cache);
     std::cout << "The result is " << result << "\n";
 
 }
